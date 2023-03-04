@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:characters/characters.dart';
 
 void main() {
   print('Hello World');
@@ -159,13 +160,54 @@ void main() {
 
   // print(someNumber.isEven);
 
-  final someInt = someNumber as int;
-  print(someInt.isEven);
+  // final someInt = someNumber as int;
+  // print(someInt.isEven);
 
-  num someNumber1 = 3;
-  final someDouble = someNumber1 as double;
+  // num someNumber1 = 3;
+  // final someDouble = someNumber1 as double;
 
+//Mini exercise
+//1.Create a constant called age1 and set it equal to 42.
+// Create another constant called age2 and set it equal to 21.Check that the type for both constants has been inferred correctly as int by hovering your mouse pointer over the variable names in VS Code .
+//2 Create a constant called averageAge and set it equal to the average of age1 and age2 using the operation (age1 + age2)
+// Hover your mouse pointer over the averageAge to check the type. Then check the result of averageAge. Why is it a double if the components are all int
 
-//Mini exercise 
-//1.
+//Strings
+  var greeting = 'hELLO, DART';
+  print(greeting);
+  var salutation = 'Hello';
+  print(salutation.codeUnits);
+
+  const dart = '🎯';
+  print(dart.codeUnits);
+  print(dart.runes);
+
+  // we can imort a dart package called 'characters' to handle grapheme clusters
+  const family = '👨‍👩‍👧‍👦';
+  print(family.characters.length);
+  var message = 'Hello' + ' my name is ';
+  const name = 'Ray';
+  message += name;
+  // If you find yourself doing a lot of concatenation , you should use a string buffer
+  final message1 = StringBuffer();
+  message1.write('hello');
+  message1.write('My name is ');
+  message1.write('kelqsa');
+  message.toString();
+  //This creates a mutable lication in memory where you can add to the string without aving to create a new stirng every change
+
+  //interplotation - very similar to javascript interpolation
+
+  const oneThird = 1 / 3;
+  const sentence = 'One third is $oneThird';
+  final sentence1 = 'One third is ${oneThird.toStringAsFixed(3)}';
+  print(sentence1);
+
+  // in dart , three quotes can represent multi line strings
+  const bigString = '''You can have a string
+       that contains multiple 
+       lines 
+       by doing 
+       this ''';
+  print('I \u2764 Dart \u0021');
 }
