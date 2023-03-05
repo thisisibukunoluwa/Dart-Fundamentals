@@ -210,4 +210,115 @@ void main() {
        by doing 
        this ''';
   print('I \u2764 Dart \u0021');
+
+  //Objects
+  // var myVariable1 = 42;
+  // myVariable1 = "hello";
+  // Compile time error
+
+  dynamic myVariable2 = 42;
+  myVariable2 = 'hello';
+  //No error
+
+  Object? myVariable3 = 42;
+  myVariable3 = 'hello';
+
+  //Challenge 1 - teacher's grading
+  final double attendance = (90 / 100) * 20;
+  final double homework = (80 / 100) * 30;
+  final double examination = (94 / 100) * 50;
+
+  final grade = (attendance + homework + examination).round();
+  print(grade);
+
+  //Same same, but different different
+
+  const twoCountries = '🇹🇩🇷🇴';
+  print(twoCountries.runes);
+  // Romanias regional indicator sequence is RO, and R is 127479 in decimal
+  //Chad which is Tishad in Arabic has a regional indicator sequnce of TD, of which Sequence letter T is 127481 in decimal
+
+  //Challenge 3 : How many?
+  const vote = 'Thumbs up! 👍🏿';
+  //There are 15 codeunits in the string
+  print(vote.codeUnits.length);
+  // There are 13 codepoint in the vote string
+  print(vote.runes.length);
+  //There are grapheme clusters in the vote string
+  print(vote.codeUnits);
+
+  //challenge 4
+  // print();
+  //challenge 5
+  //What is the type of the value
+  const value = 10 / 2;
+  print(value.runtimeType);
+  //challenge 6 In summary
+  const number1 = 10;
+  const multiplier = 5;
+  final summary = '$number \u00D7 $multiplier = ${number * multiplier}';
+  print(summary);
+
+  //control flow
+
+  const bool yes = true;
+  const bool no = false;
+
+  const doesOneEqualTwo = (1 == 2);
+  print(doesOneEqualTwo);
+  const doesOneNotEqualTwo = (1 != 2);
+
+  const alsoTrue = !(1 == 2);
+
+  //Mini exercises
+
+  const isTeenager = (myAge > 13 && myAge < 19);
+
+  const maryAge = 30;
+
+  const bothTeenagers =
+      ((myAge > 13 && myAge < 19) && (maryAge > 13 && maryAge < 19));
+  print(bothTeenagers);
+  const reader = 'ibukunoluwa';
+  const ray = 'Ray Wenderlich';
+
+  const rayIsReader = reader == ray;
+  print(rayIsReader);
+  //Enumerated types e.g enums
+
+  switch (AudioState.playing) {
+    case AudioState.playing:
+      print('I am Playing');
+      break;
+    case AudioState.paused:
+      print('I am paused');
+      break;
+    case AudioState.stopped:
+      print('i am stopped');
+      break;
+  }
+
+  final random = Random();
+
+  while (random.nextInt(6) + 1 != 6) {
+    print('Not a six');
+  }
+
+  const myString = 'I ❤ Dart !';
+
+  for (var codePoint in myString.runes) {
+    print(String.fromCharCode((codePoint)));
+  }
+  //Mini exercises 
+  
 }
+
+enum Weather { sunny, snowy, cloudy, rainy }
+
+const weatherToday = Weather.cloudy;
+
+final index = weatherToday.index;
+
+enum AudioState { playing, paused, stopped }
+
+const audioState = AudioState;
