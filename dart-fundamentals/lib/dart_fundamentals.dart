@@ -196,7 +196,7 @@ void main() {
   message.toString();
   //This creates a mutable lication in memory where you can add to the string without aving to create a new stirng every change
 
-  //interplotation - very similar to javascript interpolation
+  //interpolation - very similar to javascript interpolation
 
   const oneThird = 1 / 3;
   const sentence = 'One third is $oneThird';
@@ -309,8 +309,214 @@ void main() {
   for (var codePoint in myString.runes) {
     print(String.fromCharCode((codePoint)));
   }
-  //Mini exercises 
-  
+  //Mini exercises
+  var counter2 = 0;
+
+  while (counter2 < 10) {
+    print('counter is $counter');
+    counter2++;
+  }
+  for (var i = 0; i <= 10; i++) {
+    print(pow(i, 2));
+  }
+  const numbers = [1, 2, 4, 7];
+  for (var num in numbers) {
+    print(sqrt(num));
+  }
+  numbers.forEach((number) => print(number));
+
+  //challenge 1
+  // const firstName = 'Bob';
+  // if (firstName == 'Bob') {
+  //   const lastName = 'Smith';
+  // } else if (firstName == 'Ray') {
+  //   const lastName = 'Wenderlich';
+  // }
+  // final fullName = firstName + ' ' + lastName;
+  // lastname is undefined , out of scope
+
+  //Challenge 2
+  true && true;
+  false || false;
+  (true && 1 != 2) || (4 > 3 && 100 < 1);
+  ((10 / 2) > 3) && ((10 % 2) == 0);
+
+  //Challenge 3 Next power of two;
+  //Challenge 4 fibonacci
+  //Challenge 5 How many times
+  var sum = 0;
+  for (var i = 0; i <= 5; i++) {
+    sum += i;
+  }
+  // Challenge 6
+  var i = 11;
+  while (i > 0) {
+    i--;
+    print(i);
+  }
+  //Challenge 7
+  double j = 0.0;
+  while (j < 1.0) {
+    j += 0.1;
+    print(j.toStringAsFixed(1));
+  }
+  //Chapter 5 - functions
+  String fullName(String first, String last, String title) {
+    return '$title $first $last';
+  }
+
+  print(fullName('first', 'last', 'title'));
+  String fullName1(String first, String last, [String? title]) {
+    if (title != null) {
+      return '$title $first $last';
+    } else {
+      return '$first $last';
+    }
+  }
+
+  print(fullName1('first', 'last'));
+  //The question mark '?' is not written after the type, it is part of the type,
+  bool withinTolerance(int value, [int min = 0, int max = 10]) {
+    return min <= value && value <= max;
+  }
+
+  // we use curly braces to create named parameters
+  bool withinToleranceNamed(int value, {int min = 0, int max = 10}) {
+    return min <= value && value <= max;
+  }
+
+  withinTolerance(5);
+  withinTolerance(15);
+  print(withinToleranceNamed(9, min: 7, max: 11));
+  //Another benefit is that you don't have to use them in the order they were defined
+  //named parameters are optional by default
+  print(withinToleranceNamed(9, max: 13, min: 9));
+  // we will make value required instead of optional while still keeping it a named parameter
+  bool withinToleranceNamedValue(
+      {required int value, int min = 0, int max = 10}) {
+    return min <= value && value <= max;
+  }
+
+  String youAreWonderful({required name, numberPeople = 30}) {
+    return 'You\'re wonderful $name. $numberPeople people think so';
+  }
+
+  print(youAreWonderful(name: 'Ibukunoluwa', numberPeople: 1));
+  print(withinToleranceNamedValue(value: 4, min: 4, max: 18));
+
+  int Number = 4;
+  String Greeting = 'hello';
+  bool isHungry = true;
+
+  // Function multiply(int a, int b) {
+  //   return a * b;
+  // }
+  // A function expression can't have a name
+  // Function myFunction = int multiply(int a,int b) {
+  //   return a * b;
+  // }
+  Function namedFunction() {
+    return () {
+      print('hello');
+    };
+  }
+
+  // final multiply = (int a, int b) {
+  //   return a * b;
+  // };
+
+  // print(multiply(2, 3));
+
+  // Function applyMultiplier(num multiplier) {
+  //   return (num value) {
+  //     return value * multiplier;
+  //   };
+  // }
+
+  const numbers3 = [1, 2, 3];
+
+  numbers.forEach((number) {
+    final tripled = number * 3;
+    print(tripled);
+  });
+
+  Function applyMultiplier(num multiplier) {
+    return (num value) {
+      return value * multiplier;
+    };
+  }
+
+  final triple = applyMultiplier(3);
+  print(triple(6));
+  print(triple(14.0));
+  //closure
+  Function countingFunction() {
+    var counter = 0;
+    final incrementCounter = () {
+      counter += 1;
+      return counter;
+    };
+    return incrementCounter;
+  }
+
+  final Counter1 = countingFunction();
+  final Counter2 = countingFunction();
+
+  print(Counter1());
+  print(Counter2());
+  print(Counter1());
+  print(Counter1());
+  print(Counter2());
+
+  //Mini exercises
+
+  const people = ['Chris', 'Tiffani', 'Pablo'];
+
+  people.forEach((person) => print('$person, you\'re wonderful!'));
+
+  // Challenge 1
+  //Write a function that checks if a number is prime
+
+  //Challenge 2
+  //Can you repeat that
+
+  // int repeatTask(int times, int input, Function task) {
+  //   return task(input, times);
+  // }
+
+  // print(repeatTask(4, 2, () {pow()}));
+
+  //Classes
+  //before version 2.0 of dart came out the new keyword was neeeded to create an object from a class
+  // final user = new User();
+  final user = User();
+
+  final user1 = user.name;
+  final id = user.id;
+
+  user.name = 'Ray';
+  user.id = 42;
+
+  print(user);
+
+  @override
+  String toString() {
+    return 'User(id: $id, name:$name)';
+  }
+
+  //simple JSON deserialisation method
+  print(user.toJson());
+
+  // final user2 = User()
+  //   ..name = 'Ray'
+  //   ..id = 42;
+
+  final user2 = User(4738, 'Remn');
+  print(user);
+
+  //Named constructor
+  final anonymousUser = User.anonymous();
+  print(anonymousUser);
 }
 
 enum Weather { sunny, snowy, cloudy, rainy }
@@ -322,3 +528,58 @@ final index = weatherToday.index;
 enum AudioState { playing, paused, stopped }
 
 const audioState = AudioState;
+
+class User {
+  //class constructor - long form constructor
+  // User(int id, String name) {
+  //   this.id = id;
+  //   this.name = name;
+  // }
+
+  // int id = 0;
+  // String name = '';
+
+  // User.anonymous() {
+  //   id = 0;
+  //   name = 'anonymous';
+  // }
+// class constructor - short form constructor
+// User(this.id,this.name);
+
+//You can make classes optional this way
+// MyClass([this.myProperty])
+// MyClass({this.myProperty})
+
+  User.anonymous() : this(0, 'anonymous');
+
+  //This time theres no constructor body but instead ypu follow the name with a colon then forward the properties to the unnamed constructor .The forwarding syntax replaces User with this.
+
+  int id;
+  String name;
+
+  final anonymousUser = User.anonymous();
+
+  String toJson() {
+    return '{"id":$id,"name":"$name"}';
+  }
+
+  //initializer lists 
+  //private variables
+  
+}
+
+class Password {
+  String value = '';
+
+  @override
+  toString() {
+    return value;
+  }
+
+  isValid() {
+    if (value.length > 8) {
+      return true;
+    }
+    return false;
+  }
+}
