@@ -517,6 +517,21 @@ void main() {
   //Named constructor
   final anonymousUser = User.anonymous();
   print(anonymousUser);
+
+  final map = {'id': 10, 'name': 'Manda'};
+  final manda = User.fromJson(map);
+  print(manda);
+
+  // const password = Password1();
+
+  final email = Email();
+  // This line sets the internal _address field
+  email.value = 'ray@example.com';
+  // This line gets the internal _address field
+  final emailString = email.value;
+
+  final email1 = Email1('ibukunoluwaakintobi@gmail.com');
+  final emailString1 = email.value;
 }
 
 enum Weather { sunny, snowy, cloudy, rainy }
@@ -544,7 +559,7 @@ class User {
   //   name = 'anonymous';
   // }
 // class constructor - short form constructor
-// User(this.id,this.name);
+  User(this.id, this.name);
 
 //You can make classes optional this way
 // MyClass([this.myProperty])
@@ -563,9 +578,23 @@ class User {
     return '{"id":$id,"name":"$name"}';
   }
 
-  //initializer lists 
+  //initializer lists
   //private variables
-  
+  //factory constructors
+  factory User.ray() {
+    return User(42, 'Ray');
+  }
+  //factory method
+  factory User.fromJson(Map<String, Object> json) {
+    final userId = json['id'] as int;
+    final userName = json['name'] as String;
+    return User(userId, userName);
+  }
+
+  //named constructor
+  User.fromJson1(Map<String, Object> json)
+      : id = json['id'] as int,
+        name = json['name'] as String;
 }
 
 class Password {
@@ -582,4 +611,23 @@ class Password {
     }
     return false;
   }
+}
+
+//Mini exercises
+class Password1 {
+  final String value = '';
+}
+
+class Email {
+  var _address = '';
+
+  String get value => _address;
+
+  set value(String address) => _address = address;
+}
+
+//If you want a getter without a setter, then just make the property final , which will require using a constructor to initialize the property
+class Email1 {
+  Email1(this.value);
+  final value;
 }
