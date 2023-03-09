@@ -489,13 +489,16 @@ void main() {
   //Classes
   //before version 2.0 of dart came out the new keyword was neeeded to create an object from a class
   // final user = new User();
-  final user = User();
+  final user = User(6, 'john');
+
+  // final user1 = user.name;
+  // final id = user.id;
 
   final user1 = user.name;
   final id = user.id;
 
-  user.name = 'Ray';
-  user.id = 42;
+  // user.name = 'Ray';
+  // user.id = 42;
 
   print(user);
 
@@ -515,8 +518,8 @@ void main() {
   print(user);
 
   //Named constructor
-  final anonymousUser = User.anonymous();
-  print(anonymousUser);
+  // final anonymousUser = User.anonymous();
+  // print(anonymousUser);
 
   final map = {'id': 10, 'name': 'Manda'};
   final manda = User.fromJson(map);
@@ -532,6 +535,44 @@ void main() {
 
   final email1 = Email1('ibukunoluwaakintobi@gmail.com');
   final emailString1 = email.value;
+
+  final value1 = SomeClass.myProperty;
+  SomeClass.myMethod();
+
+  final student1 = Student('bert', 'simpson', 17);
+  final student2 = Student('ernie', 'hangover', 46);
+
+  print(student1.format());
+  print(student2.format());
+
+//nullable types
+  int? myId = null;
+  double? myDouble1 = null;
+  String? myString1 = null;
+  User? myUser = null;
+
+  //if the value on the left isn't null, use it otherwise go with the value on the right
+  // using this it ensures that the text can never be null
+  String? Message;
+  // String text;
+  final text = Message ?? 'Error';
+  // Its equivalent to
+  // if (message == null) {
+  //   text = 'Error';
+  // } else {
+  //   text = Message;
+  // }
+
+// if you have a single variable you want to update if its value is null
+  double? fontSize;
+
+  // fontSize = fontSize ?? 20.0;
+  // we can do it shorter like this
+  fontSize ??= 20.0;
+
+  // retrurns null if the left hand side is null , else it returns the property on the right hand side
+  int? age1;
+  print(age1?.isNegative);
 }
 
 enum Weather { sunny, snowy, cloudy, rainy }
@@ -565,14 +606,14 @@ class User {
 // MyClass([this.myProperty])
 // MyClass({this.myProperty})
 
-  User.anonymous() : this(0, 'anonymous');
+  // User.anonymous() : this(0, 'anonymous');
 
   //This time theres no constructor body but instead ypu follow the name with a colon then forward the properties to the unnamed constructor .The forwarding syntax replaces User with this.
 
-  int id;
-  String name;
+  final int id;
+  final String name;
 
-  final anonymousUser = User.anonymous();
+  // final anonymousUser = User.anonymous();
 
   String toJson() {
     return '{"id":$id,"name":"$name"}';
@@ -595,6 +636,14 @@ class User {
   User.fromJson1(Map<String, Object> json)
       : id = json['id'] as int,
         name = json['name'] as String;
+
+  static const myConstant = '42';
+
+  static const _anonymousId = 0;
+  static const _anonymousName = 'anonymous';
+
+  // const User({this.id = _anonymousId, this.name = _anonymousName})
+  //   : assert(id >= 0);
 }
 
 class Password {
@@ -631,3 +680,31 @@ class Email1 {
   Email1(this.value);
   final value;
 }
+
+//Static Members
+
+class SomeClass {
+  static int myProperty = 0;
+  static void myMethod() {
+    print('hello world');
+  }
+}
+
+//Challenges
+//Challenge 1
+
+class Student {
+  final String firstName;
+  final String lastName;
+  int grade = 0;
+  Student(this.firstName, this.lastName, this.grade);
+  format() {
+    print('$firstName $lastName, grade:$grade');
+  }
+}
+
+//Challenge 2
+// class Sphere {
+//   num radius;
+//   const Sphere({this.radius = radius});
+// }
