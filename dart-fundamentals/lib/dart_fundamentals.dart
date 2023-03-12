@@ -572,7 +572,146 @@ void main() {
 
   // retrurns null if the left hand side is null , else it returns the property on the right hand side
   int? age1;
-  print(age1?.isNegative);
+  // This one crashes
+  // print(age1.isNegative);
+  // Since age is null, it just returns null instead of crashing it prints "null" without an error
+  print(age?.toDouble());
+
+  // String nullableString = myNullableString!;
+
+  bool? isBeautiful(String? item) {
+    if (item == 'flower') {
+      return true;
+    } else if (item == 'garbage') {
+      return false;
+    }
+    return null;
+  }
+
+  // bool flowerIsBeautiful = isBeautiful('flower');
+  //we would get this error
+  //A value of type 'bool?' can't be assigned to a variable of type 'bool'.
+  bool flowerIsBeautiful = isBeautiful('flower') as bool;
+  // since bool? is a subtype of bool we can cast it to bool
+
+  // or we can use the if null operator
+  bool flowerIsBeautifulIfNull = isBeautiful('flower') ?? true;
+
+  //If you know the object isn't nullable , you can use the cascade operator,  normally, however if your object is nullable
+  // User? user;
+  // user
+  // ?..name = 'antelope';
+  // ..id = 42
+
+  // String? lengthString = user?.name?.length.toString();
+
+  List<int>? myList = [1, 2, 3];
+
+  myList = null;
+
+  int? myItem = myList?[2];
+
+  //Challenge 1
+  // Function randomNothings() {
+  //   var rand = Random();
+  //   if (rand.nextInt(1) == 0) {
+
+  //   }
+  //   else if (rand.nextInt(1) == 1) {
+
+  //   }
+  // };
+  // challenge 2
+
+  List<String> desserts = ['cookies', 'cupcakes', 'donuts'];
+
+  var snacks = <String>[];
+
+  print(desserts);
+
+  final index = desserts.indexOf('donuts');
+  final dessert = desserts[index];
+  print(dessert);
+
+  desserts.add('ice cream');
+
+  desserts.remove('cake');
+
+  final Desserts = ['chocolate', 'vanilla', 'strawberry'];
+
+  const dessertsImmutable = ['cookies', 'doughnut', 'pie'];
+
+  final dessertsImmutable2 = const ['cookies', 'doughnut', 'chocolate bread'];
+
+  final modifiableList = [DateTime.now(), DateTime.now()];
+
+  final unmodifiableList = List.unmodifiable(modifiableList);
+
+  const drinks = ['water', 'lacasera', 'fourcousins'];
+
+  print(drinks.last);
+  print(drinks.first);
+  print(drinks.isEmpty);
+  print(drinks.isNotEmpty);
+
+  for (var drink in drinks) {
+    print(drink);
+  }
+  drinks.forEach((drink) => print(drink));
+
+  const sweets = ['bonbon', 'bounty', 'snickers', 'toblerone'];
+  const pastries = ['cookies', 'croissants'];
+
+  const allDesserts = ['donuts', ...sweets, ...pastries];
+
+  print(allDesserts);
+
+  List<String>? coffees;
+
+  final hotDrinks = ['milktea', ...?coffees];
+
+  //collection if
+
+  const peanutAllergy = true;
+  const candy = [
+    'senior mints',
+    'Twizzlers',
+    if (!peanutAllergy) 'Reeses pieces',
+    // it works even though the IDE is showing me dead code
+  ];
+  print(candy);
+
+  //collection for
+
+  const deserts = ['sahara', 'gobi', 'arctic'];
+  var bigDeserts = [
+    'ARABIAN',
+    for (var desert in deserts) desert.toUpperCase()
+  ];
+  print(bigDeserts);
+
+  // Mini Exercise 1
+  List<String> months = [];
+
+  months.add('January');
+  months.add('February');
+  months.add('march');
+  months.add('april');
+  months.add('May');
+  months.add('June');
+  months.add('July');
+  months.add('August');
+  months.add('September');
+  months.add('October');
+  months.add('November');
+  months.add('December');
+
+  var unModifiableMonths = List.unmodifiable(months);
+
+  var MONTHS = [for (var month in months) month.toUpperCase()];
+
+
+  //Sets
 }
 
 enum Weather { sunny, snowy, cloudy, rainy }
@@ -708,3 +847,61 @@ class Student {
 //   num radius;
 //   const Sphere({this.radius = radius});
 // }
+
+// you can also use an initializer list to set a field variable
+
+class User1 {
+  User1(String name) : _name = name;
+  String _name;
+}
+
+// Using default parameter values
+//ordered parameters
+class User2 {
+  User2([this.name = 'anonymous']);
+  String name;
+}
+
+// named parameters
+class User3 {
+  User3({this.name = 'anonymous'});
+  String name;
+}
+
+class User4 {
+  User4({required this.name});
+  String name;
+}
+//if you want the property to be nullable then you can use a nullable type, and theres no need to initialize the value
+
+class UserN {
+  UserN({this.name});
+  String? name;
+}
+
+class TextWidget {
+  String? text;
+  bool isLong() {
+    final text = this.text; // shadowing
+    if (text == null) {
+      return false;
+    }
+    // dart can't guarantee that other mthods or subclasses can't change the value of a non local variable before its used, thats why you have an error . you can use the bang operator
+    // another method you can use is shadowing or , you shadow the variable
+    // the local varibale text shadows the instance variable this.text and the compiler would not throw any errors
+    // return text.length > 100;
+    // return text!.length > 100;
+    return text.length > 100;
+  }
+}
+
+class User5 {
+  User5(this.name);
+
+  final String name;
+  late final int _secretNumber = _calculateSecret();
+
+  int _calculateSecret() {
+    return name.length + 42;
+  }
+}
