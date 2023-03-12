@@ -710,8 +710,33 @@ void main() {
 
   var MONTHS = [for (var month in months) month.toUpperCase()];
 
-
   //Sets
+  final Set<int> someSet = {1, 2, 3, 3, 4, 45, 4};
+
+  print(someSet);
+
+  print(someSet.contains(34));
+
+  someSet.add(90);
+
+  someSet.remove(45);
+
+  someSet.addAll([1, 2, 3, 4, 5]);
+
+  final setA = {
+    4,
+    5,
+    6,
+    6,
+    3,
+  };
+
+  final setB = {4, 39, 291, 2, 6, 5};
+
+  final intersection = setA.intersection(setA);
+  final union = setA.union(setA);
+
+
 }
 
 enum Weather { sunny, snowy, cloudy, rainy }
