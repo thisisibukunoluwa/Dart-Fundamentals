@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:math';
 import 'package:characters/characters.dart';
 
@@ -713,7 +714,7 @@ void main() {
   //Sets
   final Set<int> someSet = {1, 2, 3, 3, 4, 45, 4};
 
-  print(someSet);
+  print('$someSet');
 
   print(someSet.contains(34));
 
@@ -736,7 +737,149 @@ void main() {
   final intersection = setA.intersection(setA);
   final union = setA.union(setA);
 
+  //Maps
 
+  final Map<String, int> emptyMap = {};
+
+  final emptyMap1 = <String, int>{};
+
+  //initializing a map with values
+  final inventory = {'cakes': 20, 'pies': 14, 'donuts': 45, 'cookies': 141};
+
+  final digitMap = {1: 'one', 2: 'two', 3: 'three'};
+
+  //keys have to be unique , values however don't have that restriction
+
+  // final myMap = {
+  //   'greeting' : 'hello',
+  //   'greeting' : 'hello',
+  //   'reply':'hi',
+  // }
+
+  final numberOfCakes = inventory['cakes'];
+
+  print(numberOfCakes?.isEven);
+
+  //Adding to the map
+  inventory['brownies'] = 90;
+
+  //Updating an element
+  inventory['cakes'] = 1;
+
+  inventory.remove('cookies');
+
+  print(inventory.keys);
+  print(inventory.values);
+
+  print(inventory.containsKey('pies'));
+
+  // Unlike lists, you can't iterate over a map
+  // for (var item in inventory) {
+  //   print(inventory[item]);
+  // }
+  for (var item in inventory.keys) {
+    print(inventory[item]);
+  }
+  // You can use the forEach method
+  inventory.forEach((key, value) => '$key -> $value');
+
+  //or using for loop
+  for (final entry in inventory.entries) {
+    print('${entry.key} -> ${entry.value}');
+  }
+
+  //Mini exercises
+
+  final anotherMap = {
+    'name': 'ibukunoluwa',
+    'profession': 'Software Engineer',
+    'country': 'Nigeria',
+    'city': 'Lagos'
+  };
+  anotherMap['country'] = 'Canada';
+  anotherMap['city'] = 'Toronto';
+
+  for (var value in anotherMap.entries) {
+    print(value);
+  }
+
+  const numbers1 = [1, 3, 4, 5];
+  final squares = numbers.map((number) => number * number);
+  //Squares is actually an iterable of int not a List, as you can see, if you print it is in parentheses if you really want a list , you can use .toList()
+  print(squares.toList());
+  //You can filter a collection using the where method
+
+  final evens = squares.where((square) => square.isEven);
+
+  const amounts = [199, 299, 299, 499];
+  final total = amounts.reduce((sum, element) => sum + element);
+  print(total);
+
+  final desserts2 = ['cookies', 'pie', 'donuts', 'brownies'];
+
+  desserts2.sort();
+
+  var desserts2reversed = desserts2.reversed;
+
+  //Performing a custom sort
+  desserts2.sort((d1, d2) => d1.length.compareTo(d2.length));
+
+  const desserts3 = ['cake', 'pie', 'brownies'];
+
+  final bigTallDeserts = desserts
+      .where((desert) => dessert.length > 5)
+      .map((dessert) => dessert.toUpperCase());
+
+  print(bigTallDeserts);
+
+  //Mini exercises
+  final scores = [89, 77, 46, 93, 82, 67, 32, 88];
+
+  scores.sort();
+
+  final rangeScores = scores.where((el) => el > 80 && el < 90);
+
+  print(rangeScores);
+
+  // Challenges
+
+  //Challenge 1
+
+  List<String> uniqueRequest(String paragraph) {
+    final Set<String> uniqueSet = {};
+    for (var word in paragraph.split(' ')) {
+      for (var letter in word.split('')) {
+        uniqueSet.add(letter);
+      }
+    }
+    return uniqueSet.toList();
+  }
+
+  print(uniqueRequest(
+      'hello i am a person that likes to write Javascript , Typescript, NEXTJS'));
+
+  //Challenge 2
+
+  Map<String, num> uniqueRequestFreqCounter(String paragraph) {
+    final Map<String, num> freqCounter = {};
+    for (var word in paragraph.split(' ')) {
+      for (var letter in word.split('')) {
+        freqCounter[letter] = (freqCounter[letter] ??= 0) + 1;
+      }
+    }
+    return freqCounter;
+  }
+
+  print(uniqueRequestFreqCounter('hello i am a person that likes to write'));
+
+  //Challenge 3
+
+  //Advanced Classes
+  print(jon.fullName);
+  print(jane.fullName);
+
+  final historyGrade = Grade.B;
+  jane.grades.add(historyGrade);
 }
 
 enum Weather { sunny, snowy, cloudy, rainy }
@@ -930,3 +1073,59 @@ class User5 {
     return name.length + 42;
   }
 }
+
+// class userMap {
+//   final String name;
+//   final String id;
+
+//   List<String> = []
+// }
+enum Grade { A, B, C, D, E }
+
+class Person {
+  Person(this.givenName, this.surname);
+
+  String givenName;
+  String surname;
+  String get fullName => '$givenName $surname';
+
+  @override
+  String toString() => fullName;
+}
+
+class Student1 {
+  Student1(this.givenName, this.surname);
+  String givenName;
+  String surname;
+  var grades = <Grade>[];
+  String get fullName => '$givenName $surname';
+
+  @override
+  String toString() => fullName;
+}
+
+// as you can see in the Person adn student classes they are very similar , we can remove the duplicatin  between Student and Person by making Student extend Person
+class Student2 extends Person {
+  Student2(String givenName, String surname) : super(givenName, surname);
+  var grades = <Grade>[];
+
+  @override
+  String get fullName => '$surname, $givenName';
+}
+
+final jon = Person('jon', 'wintercatcher');
+final jane = Student2('jane', 'Goodread');
+
+class SomeParent {}
+
+class SomeChild extends SomeParent {
+  SomeChild(double height)
+      : assert(height != 0), // Assert
+        _height = height, // initializer
+        super(); // super
+
+  final double _height;
+}
+
+//Calling super from an overriden method 
+
