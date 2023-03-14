@@ -880,6 +880,17 @@ void main() {
 
   final historyGrade = Grade.B;
   jane.grades.add(historyGrade);
+
+  final jessie = SchoolBandMember('jessie', 'ouupravosky');
+  final marty = StudentAthlete('Marty', 'simmons');
+
+  final students = [jane, jessie, marty];
+
+  print(jessie is Object);
+  print(jessie is Person);
+  print(jessie is Student);
+  print(jessie is SchoolBandMember);
+  print(jessie is! StudentAthlete);
 }
 
 enum Weather { sunny, snowy, cloudy, rainy }
@@ -1080,7 +1091,7 @@ class User5 {
 
 //   List<String> = []
 // }
-enum Grade { A, B, C, D, E }
+enum Grade { A, B, C, D, E, F }
 
 class Person {
   Person(this.givenName, this.surname);
@@ -1116,9 +1127,20 @@ class Student2 extends Person {
 final jon = Person('jon', 'wintercatcher');
 final jane = Student2('jane', 'Goodread');
 
-class SomeParent {}
+class someParent {
+  void doSomething() {
+    print('parent working');
+  }
+}
 
-class SomeChild extends SomeParent {
+class SomeParent1 {
+  void doSomework() {
+    print('parent working');
+  }
+}
+// class SomeChild1 {}
+
+class SomeChild extends SomeParent1 {
   SomeChild(double height)
       : assert(height != 0), // Assert
         _height = height, // initializer
@@ -1127,5 +1149,54 @@ class SomeChild extends SomeParent {
   final double _height;
 }
 
-//Calling super from an overriden method 
+//Calling super from an overriden method
+class SomeChild1 extends SomeParent1 {
+  @override
+  void doSomework() {
+    super.doSomework();
+    print('child doing some other work');
+  }
+}
 
+//Multi Level Hierarchy
+// class SchoolBandMember {}
+
+class SchoolBandMember extends Student1 {
+  SchoolBandMember(String givenName, String surname)
+      : super(givenName, surname);
+  static const minimumPracticeTime = 2;
+}
+//The SchoolBandMember calls the Stuent constructor with the super keyword, which in turn calls the Person keyword
+
+// In order to be eligible for athletics , you have to make sure a student ahsn't failed all the other classes
+
+class StudentAthlete extends Student1 {
+  StudentAthlete(String givenName, String surname) : super(givenName, surname);
+  bool get isEligible => grades.every((grade) => grade != Grade.F);
+}
+
+//Mini exercises
+
+class Fruit {
+  final String color;
+  Fruit(this.color);
+
+  String describeColor() {
+    return 'i am $color in color';
+  }
+}
+class Melon extends Fruit {
+  Melon(String color) : super(color);
+}
+
+class WaterMelon extends Melon {
+WaterMelon(String color) : super(color);
+@override
+String describeColor() {
+    return 'i am $color in color, but i am in the watermelon subclass';
+  }
+}
+
+class CantaLoupe extends Melon {
+CantaLoupe(String color) : super(color);
+}
