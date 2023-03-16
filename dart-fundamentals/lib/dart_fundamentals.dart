@@ -891,6 +891,26 @@ void main() {
   print(jessie is Student);
   print(jessie is SchoolBandMember);
   print(jessie is! StudentAthlete);
+
+  final platypus = Platypus();
+  print(platypus.isAlive);
+  platypus.eat();
+  platypus.move();
+  print(platypus);
+
+  final DataRepository repository = FakeWebServer();
+  final temperature = repository.fetchTemperature('berlin');
+
+  final someClass = SomeClass1();
+
+  print(someClass.myField);
+  someClass.myMethod();
+
+  final bottle = Bottle();
+  bottle.open();
+
+  final platypus1 = Platypus();
+  platypus1.layEggs();
 }
 
 enum Weather { sunny, snowy, cloudy, rainy }
@@ -1185,18 +1205,129 @@ class Fruit {
     return 'i am $color in color';
   }
 }
+
 class Melon extends Fruit {
   Melon(String color) : super(color);
 }
 
 class WaterMelon extends Melon {
-WaterMelon(String color) : super(color);
-@override
-String describeColor() {
+  WaterMelon(String color) : super(color);
+  @override
+  String describeColor() {
     return 'i am $color in color, but i am in the watermelon subclass';
   }
 }
 
 class CantaLoupe extends Melon {
-CantaLoupe(String color) : super(color);
+  CantaLoupe(String color) : super(color);
+}
+
+//abstract classes
+
+abstract class Animal {
+  bool isAlive = true;
+  void eat();
+  void move();
+
+  @override
+  String toString() {
+    return "I'm a $runtimeType";
+  }
+}
+
+class Platypus extends Animal {
+  @override
+  void eat() {
+    print('munch munch');
+  }
+
+  @override
+  void move() {
+    print('glide glide');
+  }
+
+  void layEggs() {
+    print('Plop plop');
+  }
+}
+
+//Creating an interface
+//SInce there is no interface keyword in dart, we are going to use an abstract class as an interface
+
+// abstract class DataRepository {
+//   double? fetchTemperature(String city);
+// }
+
+abstract class DataRepository {
+// Adding a factory constructor
+  factory DataRepository() => FakeWebServer();
+  double? fetchTemperature(String city);
+}
+
+//when making a concrete class to implement an interface , you use the implements keyword not the extends keyword
+
+class FakeWebServer implements DataRepository {
+  @override
+  double? fetchTemperature(String city) {
+    return 42.0;
+  }
+}
+
+// a benefit of using interfaces is that you can create mock implementations to mimic the real implementations
+
+class AnotherClass {
+  int myField = 42;
+  void myMethod() => print(myField);
+}
+
+class SomeClass1 extends AnotherClass {}
+
+//Mini Exercises
+
+abstract class Bottle {
+  factory Bottle() => SodaBottle();
+  void open();
+}
+
+class SodaBottle implements Bottle {
+  @override
+  void open() {
+    return print('Fizz Fizz');
+  }
+}
+
+// Mixinx are even new additions to dart, you might see legacy code still using classes as mixins
+mixin EggLayer {
+  void layEggs() {
+    print('plop plop');
+  }
+}
+mixin Flyer {
+  void fly() {
+    print('Swoosh swoodh');
+  }
+}
+
+class Platypus1 extends Animal with EggLayer {
+  @override
+  void eat() {
+    print('Munch munch');
+  }
+
+  @override
+  void move() {
+    print('Glide glide');
+  }
+}
+
+//Mini exercises
+mixin Adder {
+   void sum(int int1, int int2) {
+    print(int1 + int2);
+  }
+}
+class Calculator with Adder {
+  // sum(int int1, int int2) {
+  //   print(int1 + int2);
+  // }
 }
