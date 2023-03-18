@@ -1,8 +1,10 @@
-import 'dart:html';
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'dart:math';
 import 'package:characters/characters.dart';
 
-void main() {
+void main() async {
   print('Hello World');
   //Math
   print(45 ~/ 7);
@@ -911,6 +913,68 @@ void main() {
 
   final platypus1 = Platypus();
   platypus1.layEggs();
+
+  String encode(String input) {
+    //This function uses a StringBuffer for effieint Stirng manipulation normal strings are immutable, but StringBuffers are immutable
+    final output = StringBuffer();
+    for (final codePoint in input.runes) {
+      output.writeCharCode(codePoint + 1);
+    }
+    return output.toString();
+  }
+
+  final original = 'abc';
+  final secret = encode(original);
+  print(secret);
+  //we can convert our encode function above to an extension
+  // final secret1 = 'abc'.encoded;
+
+  // final secret1Decoded = secret1.decoded;
+
+  // print(secret1Decoded);
+  final original1 = 'I like extensions';
+  final secret1 = original1.encoded;
+  final revealed = secret1.decoded;
+  print(secret1);
+  print(revealed);
+  print(5.cubed);
+
+// The Future is of type int, after a delay of 10 seconds dart will add it to the event queue
+
+  final myFuture = Future<int>.delayed(Duration(seconds: 10), () => 42);
+//If we print it, we will get  Instance of 'Future<int>', this i sbeacuse your variable isn't 42, its a Future that is a promise to return 42
+  print(myFuture);
+
+  print('Before the future 1');
+  final myFuture1 = Future<int>.delayed(Duration(seconds: 6), () => 42)
+      .then(
+        (value) => print('Value1 : $value'),
+      )
+      .catchError(
+        (error) => print('Error1 : $error'),
+      )
+      .whenComplete(() => print('Future1 is complete'));
+
+  print('After the future 1');
+
+//Getting the results with async await
+  print('Before the future 2');
+  final valueAsync = await Future<int>.delayed(Duration(seconds: 5), () => 43);
+  print('Value2 : $valueAsync');
+  print('After the future 2');
+
+  // Using a try Catch Statement
+  print('Before the future 3');
+  try {
+    final value = await Future<int>.delayed(Duration(seconds: 5), () => 43);
+    print('Value : $value');
+    throw Exception('There was an error');
+  } catch (error) {
+    print(error);
+  } finally {
+    print('Future is completed 3');
+  }
+  print('After the future 3');
 }
 
 enum Weather { sunny, snowy, cloudy, rainy }
@@ -1235,7 +1299,10 @@ abstract class Animal {
   }
 }
 
+// class Platypus extends Animal implements Comparable {
 class Platypus extends Animal {
+  int? weight;
+
   @override
   void eat() {
     print('munch munch');
@@ -1249,6 +1316,9 @@ class Platypus extends Animal {
   void layEggs() {
     print('Plop plop');
   }
+
+  // @override
+  // int compareTo(other) {}
 }
 
 //Creating an interface
@@ -1322,12 +1392,112 @@ class Platypus1 extends Animal with EggLayer {
 
 //Mini exercises
 mixin Adder {
-   void sum(int int1, int int2) {
+  void sum(int int1, int int2) {
     print(int1 + int2);
   }
 }
+
 class Calculator with Adder {
   // sum(int int1, int int2) {
   //   print(int1 + int2);
   // }
 }
+
+// extension on String {
+//   String get encoded {
+//     final output = StringBuffer();
+//     for (final codePoint in runes) {
+//       output.writeCharCode(codePoint + 1);
+//     }
+//     return output.toString();
+//   }
+
+//   String get decoded {
+//     final output = StringBuffer();
+//     for (final codePoint in runes) {
+//       output.writeCharCode(codePoint - 1);
+//     }
+//     return output.toString();
+//   }
+// }
+
+//refactored version
+extension on String {
+  String get encoded {
+    return _code(1);
+  }
+
+  String get decoded {
+    return _code(-1);
+  }
+
+  String _code(int step) {
+    final output = StringBuffer();
+    for (final codePoint in runes) {
+      output.writeCharCode(codePoint + step);
+    }
+    return output.toString();
+  }
+}
+
+//int extension example
+
+extension on int {
+  int get cubed {
+    return this * this * this;
+  }
+}
+
+//enum extension example
+
+//Challenges
+
+//Challenge 1
+//up
+
+//Challenge 2
+// Fake Notes
+
+//Challenge 3
+//Time to code
+
+// Challenge 1: Heavy monotremes
+// Dart has a class named Comparable, which is used by the the sort method of List to sort its elements. Add a weight field to the Platypus class you made in this lesson. Then make Platypus implement Comparable so that when you have a list of Platypus objects, calling sort on the list will sort them by weight.
+// Challenge 2: Fake notes
+// Design an interface to sit between the business logic of your note-taking app and a SQL database. After that, implement a fake database class that will return mock data.
+// Challenge 3: Time to code
+// Dart has a Duration class for expressing lengths of time. Make an extension on int so that you can express a duration like so:
+
+//Asynchronous programming
+//Implementing a network data class
+
+class Todo {
+  Todo({
+    required this.userId,
+    required this.id,
+    required this.title,
+    required this.completed,
+  });
+  factory Todo.fromJson(Map<String, Object?> jsonMap) {
+    return Todo(
+      userId: jsonMap['userId'] as int,
+      id: jsonMap['id'] as int,
+      title: jsonMap['title'] as String,
+      completed: jsonMap['completed'] as bool,
+    );
+  }
+
+  final int userId;
+  final int id;
+  final String title;
+  final bool completed;
+
+  @override
+  String toString() {
+    return 'userId : $userId\n'
+        'id : $id\n'
+        'title: $title\n'
+        'completed: $completed';
+  }
+}
+
