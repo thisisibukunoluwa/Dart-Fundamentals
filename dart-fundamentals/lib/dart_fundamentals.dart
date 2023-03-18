@@ -975,6 +975,71 @@ void main() async {
     print('Future is completed 3');
   }
   print('After the future 3');
+
+  final url = 'https://jsonplaceholder.typicode.com/todos/1';
+  final parsedUrl = Uri.parse(url);
+  final response = await http.get(parsedUrl);
+  final statusCode = response.statusCode;
+  if (statusCode == 200) {
+    final rawJsonString = response.body;
+    final jsonMap = jsonDecode(rawJsonString);
+    final todo = Todo.fromJson(jsonMap);
+    print(todo);
+  } else {
+    throw HttpException('$statusCode');
+  }
+  //since it takes time to contact a server , http.get returns a future dart passes off the work of contacting the remote server to the underling platform, so you won't need to worry about it blocking your app while you wait , since you are using the await keyword, the rest of the main method will be added to the event queue when the future completes
+
+  // now with a try-Catch block
+  try {
+    final url = 'https://jsonplaceholder.typicode.com/todos/1';
+    final parsedUrl = Uri.parse(url);
+    final response = await http.get(parsedUrl);
+    final statusCode = response.statusCode;
+    if (statusCode == 200) {
+      final rawJsonString = response.body;
+      final jsonMap = jsonDecode(rawJsonString);
+      final todo = Todo.fromJson(jsonMap);
+      print(todo);
+    } else {
+      throw HttpException('$statusCode');
+    }
+  } on SocketException catch (error) {
+    print(error);
+  } on HttpException catch (error) {
+    print(error);
+  } on FormatException catch (error) {
+    print(error);
+  }
+  //Mini Exercises
+  try {
+    String messageFuture = await Future.delayed(
+        Duration(seconds: 2), () => "I am from the future");
+  } catch (error) {
+    print(error);
+  }
+  // The dart:io libraray contains a File class which allows you to read data from a file.First, you'll read data the easy way using the readAsString method, which returns the contents of the file as a Future
+  // In the book it was specified that i could use a relative path from the current path, but it was showing me an error so i used the absolute path and it worked
+  // final file = File('dart-fundamentals/assets/text.txt');
+  final file = File('/Users/ibukunoluwaakintobi/Desktop/flutter_fundamentals/dart-fundamentals/assets/text.txt');
+
+  // check if file exists
+  bool doesEXIST = await file.existsSync();
+  print(doesEXIST);
+  // print the current working Directory
+  print(Directory.current.path);
+
+  // print the contents of the file 
+  final dir = Directory('/Users/ibukunoluwaakintobi/Desktop/flutter_fundamentals/');
+  final List<FileSystemEntity> entities = await dir.list().toList();
+  entities.forEach(print);
+
+  final contents = await file.readAsString();
+  print(contents);
+
+  // File also has a readAsStringSync method, which would run synchronously and avoid awaiting a future. However, doing so would block your app if the reading takes a while
+  // Many of the file methods have synchronous methods, but in order to prevent blocking your app, you should generally use the asynchrnous versions
+  // When the file is large you can read it as a stream
 }
 
 enum Weather { sunny, snowy, cloudy, rainy }
@@ -1500,4 +1565,3 @@ class Todo {
         'completed: $completed';
   }
 }
-
