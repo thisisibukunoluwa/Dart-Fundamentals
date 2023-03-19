@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:isolate';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -941,12 +943,12 @@ void main() async {
 
 // The Future is of type int, after a delay of 10 seconds dart will add it to the event queue
 
-  final myFuture = Future<int>.delayed(Duration(seconds: 10), () => 42);
-//If we print it, we will get  Instance of 'Future<int>', this i sbeacuse your variable isn't 42, its a Future that is a promise to return 42
+  final myFuture = Future<int>.delayed(Duration(seconds: 1), () => 42);
+//If we print it, we will get  Instance of 'Future<int>', this is because your variable isn't 42, its a Future that is a promise to return 42
   print(myFuture);
 
   print('Before the future 1');
-  final myFuture1 = Future<int>.delayed(Duration(seconds: 6), () => 42)
+  final myFuture1 = Future<int>.delayed(Duration(seconds: 1), () => 42)
       .then(
         (value) => print('Value1 : $value'),
       )
@@ -959,14 +961,14 @@ void main() async {
 
 //Getting the results with async await
   print('Before the future 2');
-  final valueAsync = await Future<int>.delayed(Duration(seconds: 5), () => 43);
+  final valueAsync = await Future<int>.delayed(Duration(seconds: 1), () => 43);
   print('Value2 : $valueAsync');
   print('After the future 2');
 
   // Using a try Catch Statement
   print('Before the future 3');
   try {
-    final value = await Future<int>.delayed(Duration(seconds: 5), () => 43);
+    final value = await Future<int>.delayed(Duration(seconds: 1), () => 43);
     print('Value : $value');
     throw Exception('There was an error');
   } catch (error) {
@@ -1021,7 +1023,8 @@ void main() async {
   // The dart:io libraray contains a File class which allows you to read data from a file.First, you'll read data the easy way using the readAsString method, which returns the contents of the file as a Future
   // In the book it was specified that i could use a relative path from the current path, but it was showing me an error so i used the absolute path and it worked
   // final file = File('dart-fundamentals/assets/text.txt');
-  final file = File('/Users/ibukunoluwaakintobi/Desktop/flutter_fundamentals/dart-fundamentals/assets/text.txt');
+  final file = File(
+      '/Users/ibukunoluwaakintobi/Desktop/flutter_fundamentals/dart-fundamentals/assets/text.txt');
 
   // check if file exists
   bool doesEXIST = await file.existsSync();
@@ -1029,8 +1032,9 @@ void main() async {
   // print the current working Directory
   print(Directory.current.path);
 
-  // print the contents of the file 
-  final dir = Directory('/Users/ibukunoluwaakintobi/Desktop/flutter_fundamentals/');
+  // print the contents of the file
+  final dir =
+      Directory('/Users/ibukunoluwaakintobi/Desktop/flutter_fundamentals/');
   final List<FileSystemEntity> entities = await dir.list().toList();
   entities.forEach(print);
 
@@ -1040,6 +1044,223 @@ void main() async {
   // File also has a readAsStringSync method, which would run synchronously and avoid awaiting a future. However, doing so would block your app if the reading takes a while
   // Many of the file methods have synchronous methods, but in order to prevent blocking your app, you should generally use the asynchrnous versions
   // When the file is large you can read it as a stream
+
+  // Instead of using the readAsString on file , this tome you are using openRead() which will return a Stream<List<int>> - this is basically a Stream periodically produces a list of integers - these integers are byte values
+  // To subscribe for notifications whenever there is new data coming in from the stream
+  // calling data.length will tell you the number of bytes in the chunk
+  final fileLong = File(
+      '/Users/ibukunoluwaakintobi/Desktop/flutter_fundamentals/dart-fundamentals/assets/text_long.txt');
+  final stream = file.openRead();
+
+  // stream.listen((data) {
+  //   print('${data.length} bytes - number of bytes in the chunk ');
+  // });
+  //By default only a single object can listen to a stream ,(think of it as subscribing to an Observable in rxjS) this is known as a single subscription stream , if you wnat more than one object to be notified of stream events, then you create a broadcast stream like so (Think of it like a subject in rxJS)
+  // final broadCastStream = stream.asBroadcastStream();
+
+  //Using an asynchronous for loop
+  // we used the listen callback earlier , here is an example using a for await loop
+  // await for (var data in stream) {
+  //   print(data.length);
+  // }
+
+  // like Futures stream events can also produce errors instead of values, we can handle them using callbacks or try catch blocks
+  // when a stream finsihes sending all the data it will fire a done event
+  // stream.listen((data) {
+  //   print(data.length);
+  // }, onError: (error) {
+  //   print(error);
+  // }, onDone: () {
+  //   print('All finished');
+  // });
+
+  try {
+    final fileLong = File(
+        '/Users/ibukunoluwaakintobi/Desktop/flutter_fundamentals/dart-fundamentals/assets/text_long.txt');
+    final stream = file.openRead();
+    await for (var data in stream) {
+      print(data.length);
+    }
+  } on Exception catch (error) {
+    print(error);
+  } finally {
+    print('Finished');
+  }
+
+  // you can use the cancelOnError parameter to tell the stream that you want to stop listening in the case of an error
+  // StreamSubscription<List<int>>? subscription;
+  // subscription = stream.listen(
+  //     (data) {
+  //       print(data.length);
+  //       subscription?.cancel();
+  //     },
+  //     cancelOnError: true,
+  //     onDone: () {
+  //       print('All finished');
+  //     });
+
+  //viewing the bytes
+  // as you can see the numbers in the list, you will realize that they are the unicode representation of the letters in the text file
+  // Computes encode files differently , but this one is from a computer that uses UTF-8 encoding
+  // stream.listen(
+  //   (data) {
+  //     print(data);
+  //   },
+  // );
+
+//Decoding the bytes
+  try {
+    // The utf8.decoder takes a byte and converts it to a string
+    await for (var data in stream.transform(utf8.decoder)) {
+      print('$data - |DECODED DATA|');
+    }
+  } catch (error) {
+    print(error);
+  }
+  //Mini Exercises
+  try {
+    Stream<int> myStream = Stream<int>.periodic(
+      Duration(seconds: 1),
+      (value) => value,
+    ).take(10);
+    await for (int integerValue in myStream) {
+      print(integerValue);
+    }
+  } catch (error) {
+    print(error);
+  }
+
+  //Isolates
+  String playHideAndSeekTheLongVersion() {
+    var counting = 0;
+    for (var i = 1; i < 100000000; i++) {
+      counting = i;
+    }
+    return '$counting! Ready or not, here I come!';
+  }
+
+  print("OK, I'm counting...");
+  // print(playHideAndSeekTheLongVersion());
+
+  // even making it asynchrnous wouldnt fix it - the fact that it is computationally intensive
+  Future<String> playHideAndSeekTheLongVersionAsync() async {
+    var counting = 0;
+    await Future(() {
+      for (var i = 1; i <= 10000000000; i++) {
+        counting = i;
+      }
+    });
+    return '$counting! Ready or not, here I come!';
+  }
+
+  print("OK, I'm counting...");
+  // print(playHideAndSeekTheLongVersionAsync());
+
+  //Spawning an isolate
+
+  void playHideAndSeekTheLongVersionIsolateVersion(SendPort sendPort) {
+    var counting = 0;
+    for (var i = 1; i <= 1000000000; i++) {
+      counting = 1;
+    }
+    sendPort.send('$counting! Ready or not, here I come!');
+  }
+
+  //Spawning the isolate and listening for messages
+  //created a receivePort to listen for messages from the new isolate
+  final receivePort = ReceivePort();
+
+  //Spawned a new isolate and gave it two new arguments
+  //arg 1 - the function you want the isolate to execute
+  // - must be a top-level or static fucntion
+  // - must also take a single parameter
+  //arg 2 - will be passed as the argument to playHideAndSeekTheLongVersionIsolateVersion
+  final isolate = await Isolate.spawn(playHideAndSeekTheLongVersionIsolateVersion, receivePort.sendPort);
+
+  //receivePort.listen gets a callback whenever sendPort sends a message
+  receivePort.listen((message) {
+    print(message);
+    receivePort.close(); 
+    //Here, the isolate is no longer needed after the work is done, so you can close the receiveport port and kill the isolate to free up memory
+    isolate.kill();
+  });
+
+// note - The Flutter framework has a highly simplified way to start a new isolate, perform some work, and then return the result using a function called compute. Rather than passing the function a send port, you just pass it any values that are needed. In this case, you could just pass it the number to count to:
+// await compute(playHideAndSeekTheLongVersion,
+// 10000000000);
+  //Challenges
+  //Challenge 1 - whose turn is it ?
+  //Challenge 2 - Care to make a comment
+  final url1 = 'https://jsonplaceholder.typicode.com/comments';
+  final parsedUrl1 = Uri.parse(url1);
+  final response1 = await http.get(parsedUrl1);
+  final statusCode1 = response.statusCode;
+  if (statusCode == 200) {
+    final rawJsonString = response1.body;
+    final jsonListMap = jsonDecode(rawJsonString);
+    //Check the type of the data it is list<dynamic> ;
+    // print(jsonMap.runtimeType);
+    List<Comment> commentList = [];
+    for (Map<String, Object?> obj in jsonListMap) {
+      commentList.add(Comment.fromJson(obj));
+      print(Comment.fromJson(obj));
+      // print(Comment.fromJson(obj).body);
+    }
+    print(commentList);
+    // Comment.fromJson(jsonMap);
+    // print(todo);
+  } else {
+    throw HttpException('$statusCode');
+  }
+
+  //Challenge 3
+  final url2 = Uri.parse('https://raywenderlich.com');
+  final client2 = http.Client();
+  final request2 = http.Request('GET', url2);
+  final response2 = await client2.send(request2);
+  final stream2 = response2.stream;
+
+  try {
+    await for (var data in stream2.transform(utf8.decoder)) {
+      print(data.length);
+    }
+  } catch (error) {
+    print(error);
+  } finally {
+    client2.close();
+  }
+  //Challenge 4
+  // program to generate fibonacci series up to a certain number
+
+// take input from the user
+
+  // void fibonacciIsolate(SendPort sendPort) {
+  //   int n1 = 0, n2 = 1, nextTerm;
+
+  //   nextTerm = n1 + n2;
+
+  //   while (nextTerm <= number) {
+  //     // print the next term
+  //     print(nextTerm);
+
+  //     n1 = n2;
+  //     n2 = nextTerm;
+  //     nextTerm = n1 + n2;
+  //   }
+  //   sendPort.send('This is the $nextTerm');
+  // }
+
+  // final receivePort2 = ReceivePort();
+
+  // final isolate1 = await Isolate.spawn(fibonacciIsolate, receivePort.sendPort);
+
+  // receivePort2.listen((message) {
+  //   print(message);
+  //   receivePort2.close();
+
+  //   isolate1.kill();
+  // });
+
 }
 
 enum Weather { sunny, snowy, cloudy, rainy }
@@ -1544,6 +1765,7 @@ class Todo {
     required this.completed,
   });
   factory Todo.fromJson(Map<String, Object?> jsonMap) {
+    //Using the Todo contructor to create Todo Objects
     return Todo(
       userId: jsonMap['userId'] as int,
       id: jsonMap['id'] as int,
@@ -1564,4 +1786,31 @@ class Todo {
         'title: $title\n'
         'completed: $completed';
   }
+}
+
+class Comment {
+  Comment({
+    required this.postId,
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.body,
+  });
+  factory Comment.fromJson(Map<String, Object?> jsonMap) {
+    return Comment(
+      postId: jsonMap["postId"] as int,
+      id: jsonMap["id"] as int,
+      name: jsonMap["name"] as String,
+      email: jsonMap["email"] as String,
+      body: jsonMap["body"] as String,
+    );
+  }
+
+  final int postId;
+  final int id;
+  final String name;
+  final String email;
+  final String body;
+
+  toList() {}
 }
