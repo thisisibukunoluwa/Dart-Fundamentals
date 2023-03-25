@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/flutter-fundamentals/google_codelabs_1/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter-fundamentals/google_codelabs_1/build" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter-fundamentals/google_codelabs_1/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/dart-fundamentals/build" />
+      <excludeFolder url="file://$MODULE_DIR$/dart-fundamentals/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/dart-fundamentals/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/GDSC-dart-Assignment-1/gdsc-dart-assignment/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/GDSC-dart-Assignment-1/gdsc-dart-assignment/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/GDSC-dart-Assignment-1/gdsc-dart-assignment/build" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter-fundamentals/intro_to_widgets/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter-fundamentals/intro_to_widgets/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter-fundamentals/intro_to_widgets/build" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Dart SDK" level="project" />
+    <orderEntry type="library" name="Dart Packages" level="project" />
+  </component>
+</module>

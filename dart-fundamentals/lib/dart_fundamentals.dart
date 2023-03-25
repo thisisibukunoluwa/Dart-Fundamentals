@@ -1175,12 +1175,13 @@ void main() async {
   // - must be a top-level or static fucntion
   // - must also take a single parameter
   //arg 2 - will be passed as the argument to playHideAndSeekTheLongVersionIsolateVersion
-  final isolate = await Isolate.spawn(playHideAndSeekTheLongVersionIsolateVersion, receivePort.sendPort);
+  final isolate = await Isolate.spawn(
+      playHideAndSeekTheLongVersionIsolateVersion, receivePort.sendPort);
 
   //receivePort.listen gets a callback whenever sendPort sends a message
   receivePort.listen((message) {
     print(message);
-    receivePort.close(); 
+    receivePort.close();
     //Here, the isolate is no longer needed after the work is done, so you can close the receiveport port and kill the isolate to free up memory
     isolate.kill();
   });
@@ -1260,7 +1261,18 @@ void main() async {
 
   //   isolate1.kill();
   // });
+  Iterable<int> getOneTwoThree() sync* {
+    yield 1;
+    yield 2;
+    yield 3;
+  }
 
+  for (final value in getOneTwoThree()) {
+    print(value);
+    if (value == 2) {
+      break;
+    }
+  }
 }
 
 enum Weather { sunny, snowy, cloudy, rainy }
